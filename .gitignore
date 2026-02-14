@@ -16,3 +16,17 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+*.log
+*.pkl
+models/
+.DS_Store

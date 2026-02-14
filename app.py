@@ -19,14 +19,20 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')  # Use non-interactive backend
 import base64
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-# Database configuration
-app.config["SQLALCHEMY_DATABASE_URI"] = (
+# Get database URL from environment variable
+database_url = os.environ.get('DATABASE_URL')
+
+# Fix for Render (they use postgres:// but SQLAlchemy needs postgresql://)
+if database_url and database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url or \
     "postgresql://postgres:2025@localhost:5432/ecopackai"
-)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -608,4 +614,6 @@ def material():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True, port=5000)
+    #app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)

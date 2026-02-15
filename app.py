@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, make_response
+from flask import Flask, request, jsonify, send_file, make_response, render_template
 import pandas as pd
 import joblib
 import numpy as np
@@ -60,9 +60,14 @@ BASELINE_CO2 = df_materials['co2_score'].mean()  # ~4.14
 BASELINE_COST = df_materials['cost'].mean()  # ~4.96
 
 
-@app.route("/", methods=["GET"])
+
+@app.route("/")
 def home():
-    return "<h1>EcoPack AI - Analytics Dashboard</h1><p>Visit /dashboard for analytics</p>"
+    return render_template('simple_ui.html')
+
+@app.route("/dashboard")
+def dashboard_page():
+    return render_template('dashboard.html')
 
 
 @app.route("/api/dashboard/analytics", methods=["GET"])

@@ -10,6 +10,7 @@ flask-cors==6.0.2
 Flask-SQLAlchemy==3.1.1
 fonttools==4.60.2
 greenlet==3.2.4
+gunicorn==23.0.0
 importlib_metadata==8.7.1
 importlib_resources==6.5.2
 itsdangerous==2.2.0

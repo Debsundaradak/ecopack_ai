@@ -50,6 +50,14 @@ class Recommendation(db.Model):
     suitability_score = db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
+# Create tables on application startup (works with gunicorn)
+try:
+    with app.app_context():
+        db.create_all()
+        print("✅ Database tables initialized!")
+except Exception as e:
+    print(f"⚠️  Note: Table creation will be attempted again on startup: {e}")
+
 # Load materials and models
 df_materials = pd.read_csv("ecopackai_frozen_materials.csv")
 co2_model = joblib.load("models/co2_model.pkl")
@@ -60,13 +68,14 @@ BASELINE_CO2 = df_materials['co2_score'].mean()  # ~4.14
 BASELINE_COST = df_materials['cost'].mean()  # ~4.96
 
 
-
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
+    """Serve the main recommendation page"""
     return render_template('simple_ui.html')
 
-@app.route("/dashboard")
+@app.route("/dashboard", methods=["GET"])
 def dashboard_page():
+    """Serve the analytics dashboard"""
     return render_template('dashboard.html')
 
 
@@ -617,8 +626,28 @@ def material():
 
 
 if __name__ == "__main__":
+    # Create database tables on startup
     with app.app_context():
-        db.create_all()
-    #app.run(debug=True, port=5000)
+        try:
+            db.create_all()
+            print("✅ Database tables created successfully!")
+            
+            # Verify tables exist
+            from sqlalchemy import inspect
+            inspector = inspect(db.engine)
+            tables = inspector.get_table_names()
+            print(f"📋 Available tables: {tables}")
+            
+            if 'recommendation' in tables:
+                print("✅ 'recommendation' table is ready!")
+            else:
+                print("⚠️  Warning: 'recommendation' table not found!")
+                
+        except Exception as e:
+            print(f"❌ Error creating tables: {e}")
+            import traceback
+            traceback.print_exc()
+    
+    # Run the app
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=False)

@@ -11,7 +11,7 @@ EcoPack AI is a machine learning-based web application that recommends eco-frien
 
 ## System Architecture Overview
 
-![architecture](images/Screenshot%202026-02-19%20214649.png)
+![architecture](images/architecture.png)
 
 ### Layer Description:
 
@@ -90,11 +90,11 @@ Model performance was evaluated using:
 
 ## 🔹 Random Forest
 
-![Random Forest](images/Screenshot%202026-02-19%20220148.png)
+![Random Forest](images/rf.png)
 
 ## 🔹 XGBoost
 
-![Recommendation Page](images/Screenshot%202026-02-19%20220202.png)
+![XGBoost](images/xgb.png)
 
 Data was split into training and testing sets to ensure unbiased evaluation.
 
@@ -154,19 +154,19 @@ The project is deployed on Render with PostgreSQL integration.
 
 ## 🔹 Home Page
 
-![Recommendation Page](images/Screenshot 2026-02-19 213507.png)
+![Recommendation Page](images/recommendation.png)
 
 ## 🔹 Analytics Dashboard
 
-![Dashboard](images/Screenshot%202026-02-19%20213247.png)
+![Dashboard](images/dashboard.png)
 
 ## 🔹 CO₂ & Cost Comparison Charts
 
-![cost and co2 trend](images/Screenshot%202026-02-19%20213302.png)
+![cost and co2 trend](images/costco2trend.png)
 
 ## 🔹 other Charts
 
-![other charts](images/Screenshot%202026-02-19%20213325.png)
+![other charts](images/othercharts.png)
 
 ---
 

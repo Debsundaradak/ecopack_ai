@@ -28,5 +28,4 @@ venv/
 .env
 *.log
 *.pkl
-models/
 .DS_Store

@@ -107,28 +107,28 @@ def get_dashboard_analytics():
             'created_at': r.created_at
         } for r in recommendations])
         
-        # ========================================================================
+     
         # 1. MATERIAL USAGE COUNT
-        # ========================================================================
+
         material_usage = df['material_name'].value_counts().head(10).to_dict()
         
-        # ========================================================================
+        
         # 2. CO2 REDUCTION PERCENTAGE
-        # ========================================================================
+        
         avg_predicted_co2 = df['predicted_co2'].mean()
         co2_reduction_percent = ((BASELINE_CO2 - avg_predicted_co2) / BASELINE_CO2) * 100
         total_co2_saved = (BASELINE_CO2 - avg_predicted_co2) * len(df)
         
-        # ========================================================================
+        
         # 3. COST SAVINGS
-        # ========================================================================
+        
         avg_predicted_cost = df['predicted_cost'].mean()
         cost_savings_percent = ((BASELINE_COST - avg_predicted_cost) / BASELINE_COST) * 100
         total_cost_saved = (BASELINE_COST - avg_predicted_cost) * len(df)
         
-        # ========================================================================
+        
         # 4. ECO-FRIENDLY MATERIALS DISTRIBUTION
-        # ========================================================================
+        
         # Merge with materials data to get biodegradability
         df_with_specs = df.merge(
             df_materials[['material_name', 'biodegradibility_score', 'recyclability_percentage']], 
@@ -139,9 +139,9 @@ def get_dashboard_analytics():
         eco_friendly_count = len(df_with_specs[df_with_specs['biodegradibility_score'] >= 7])
         non_eco_count = len(df_with_specs[df_with_specs['biodegradibility_score'] < 7])
         
-        # ========================================================================
+        
         # 5. TRENDS OVER TIME
-        # ========================================================================
+        
         df['date'] = pd.to_datetime(df['created_at']).dt.date
         daily_trends = df.groupby('date').agg({
             'predicted_co2': 'mean',
@@ -152,18 +152,18 @@ def get_dashboard_analytics():
         daily_trends.columns = ['date', 'avg_co2', 'avg_cost', 'recommendation_count']
         daily_trends['date'] = daily_trends['date'].astype(str)
         
-        # ========================================================================
+        
         # 6. CATEGORY BREAKDOWN
-        # ========================================================================
+        
         category_breakdown = df.groupby('product_category').agg({
             'predicted_co2': 'mean',
             'predicted_cost': 'mean',
             'material_name': 'count'
         }).round(2).to_dict()
         
-        # ========================================================================
+        
         # 7. TOP PERFORMING MATERIALS
-        # ========================================================================
+        
         top_materials = df.groupby('material_name').agg({
             'suitability_score': 'mean',
             'predicted_co2': 'mean',
@@ -240,18 +240,18 @@ def get_dashboard_charts():
         
         charts_data = {}
         
-        # ========================================================================
+        
         # CHART 1: Material Usage Bar Chart
-        # ========================================================================
+        
         material_counts = df['material_name'].value_counts().head(10)
         charts_data['material_usage'] = {
             'labels': material_counts.index.tolist(),
             'values': material_counts.values.tolist()
         }
         
-        # ========================================================================
+        
         # CHART 2: Eco-Friendly Distribution
-        # ========================================================================
+        
         eco_counts = df_with_specs['biodegradibility_score'].apply(
             lambda x: 'Eco-Friendly (≥7)' if x >= 7 else 'Non-Eco (<7)'
         ).value_counts()
@@ -260,9 +260,9 @@ def get_dashboard_charts():
             'values': eco_counts.values.tolist()
         }
         
-        # ========================================================================
+        
         # CHART 3: CO2 Reduction Trend
-        # ========================================================================
+        
         df['date'] = pd.to_datetime(df['created_at']).dt.date
         daily_co2 = df.groupby('date')['predicted_co2'].mean().reset_index()
         daily_co2['co2_reduction'] = ((BASELINE_CO2 - daily_co2['predicted_co2']) / BASELINE_CO2) * 100
@@ -271,9 +271,9 @@ def get_dashboard_charts():
             'values': daily_co2['co2_reduction'].tolist()
         }
         
-        # ========================================================================
+        
         # CHART 4: Cost Savings Trend
-        # ========================================================================
+        
         daily_cost = df.groupby('date')['predicted_cost'].mean().reset_index()
         daily_cost['cost_savings'] = BASELINE_COST - daily_cost['predicted_cost']
         charts_data['cost_trend'] = {
@@ -281,9 +281,9 @@ def get_dashboard_charts():
             'values': daily_cost['cost_savings'].tolist()
         }
         
-        # ========================================================================
+        
         # CHART 5: Top Materials Ranking
-        # ========================================================================
+        
         top_materials = df.groupby('material_name').agg({
             'suitability_score': 'mean'
         }).sort_values('suitability_score', ascending=True).tail(10)
@@ -292,9 +292,9 @@ def get_dashboard_charts():
             'values': (top_materials['suitability_score'] * 100).tolist()
         }
         
-        # ========================================================================
+        
         # CHART 6: Category Comparison
-        # ========================================================================
+        
         category_stats = df.groupby('product_category').agg({
             'predicted_co2': 'mean',
             'predicted_cost': 'mean'
@@ -498,8 +498,7 @@ def export_excel_report():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-
-# ... (Keep your existing /api route here)
+# api route
 
 @app.route("/api", methods=["POST"])
 def material():

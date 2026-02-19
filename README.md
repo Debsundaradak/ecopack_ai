@@ -11,7 +11,7 @@ EcoPack AI is a machine learning-based web application that recommends eco-frien
 
 ## System Architecture Overview
 
-![architecture](images/architecture.png)
+![architecture](images/architecture_new.png)
 
 ### Layer Description:
 
